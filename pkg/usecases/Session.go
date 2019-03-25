@@ -11,10 +11,10 @@ type SessionUsecase interface {
 }
 
 type sessionUsecase struct {
-	repo domain.Repo
+	repo UserRepo
 }
 
-func NewSessionUsecase(repo domain.Repo) *sessionUsecase {
+func NewSessionUsecase(repo UserRepo) *sessionUsecase {
 	return &sessionUsecase{
 		repo: repo,
 	}

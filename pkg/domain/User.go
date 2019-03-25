@@ -1,10 +1,5 @@
 package domain
 
-type Repo interface {
-	FindByName(string) *User
-	Store(*User) bool
-}
-
 type User struct {
 	Name     string
 	Password string

@@ -8,15 +8,20 @@ import (
 	"github.com/SankeProds/jwtservice/pkg/domain"
 )
 
+type UserRepo interface {
+	FindByName(string) *domain.User
+	Store(*domain.User) bool
+}
+
 type UserUsecase interface {
 	RegisterUser(name, password string) error
 }
 
 type userUsecase struct {
-	repo domain.Repo
+	repo UserRepo
 }
 
-func NewUserUsecase(repo domain.Repo) *userUsecase {
+func NewUserUsecase(repo UserRepo) *userUsecase {
 	return &userUsecase{
 		repo: repo,
 	}
