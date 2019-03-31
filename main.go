@@ -9,24 +9,35 @@ import (
 
 func main() {
 
-	log.Printf("Loading Configuration\n")
+	// for apps and modules to get configuration params
+	log.Printf("Configuration")
 	conf := new(implementation.EnvOrDefaultConf)
 
-	// repos
+	// data repos
+	log.Printf("Configuration")
 	userRedisRepo := implementation.NewUserRedisRepo(conf)
 
-	// use case handler
-	UserCases := usecases.NewUserUsecase(userRedisRepo)
-	SessionCases := usecases.NewSessionUsecase(userRedisRepo)
+	// use case handlers
+	userCasesHandler := usecases.NewUserUsecase(userRedisRepo)
+	sessionCasesHandler := usecases.NewSessionUsecase(userRedisRepo)
+
+	// create each app handler
+	// App handler knows how to call the use case from  the http call
+	apps := [...]implementation.App{
+		implementation.NewUserApp(userCasesHandler),
+		implementation.NewSessionApp(sessionCasesHandler),
+	}
 
 	// Router & Routes
+	// Small layer the allows to register each app on the server handler
 	log.Printf("Creating Request Router\n")
 	requestRouter := new(implementation.RequestRouter)
 	requestRouter.Init()
-	requestRouter.AddApp(implementation.NewUserApp(UserCases))
-	requestRouter.AddApp(implementation.NewSessionApp(SessionCases))
+	for _, app := range apps {
+		requestRouter.AddApp(app)
+	}
 
-	// Server
+	// Http Server, get the routing info from requestRouter
 	log.Printf("Starting server...\n")
 	server := new(implementation.HttpServer)
 	server.Init(conf, requestRouter)
