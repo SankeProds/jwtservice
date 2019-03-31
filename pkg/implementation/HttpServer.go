@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
-	"github.com/SankeProds/jwtservice/pkg/interfaces"
 )
+
+type ServerConf interface {
+	GetHost() string
+	GetPort() int
+}
 
 type HttpRequestRouter interface {
 	GetHttpHandler() http.Handler
@@ -18,7 +21,7 @@ type HttpServer struct {
 	reqRouter HttpRequestRouter
 }
 
-func (server *HttpServer) Init(conf interfaces.ConfInterface, reqRouter HttpRequestRouter) {
+func (server *HttpServer) Init(conf ServerConf, reqRouter HttpRequestRouter) {
 	server.host = conf.GetHost()
 	server.port = conf.GetPort()
 	server.reqRouter = reqRouter
