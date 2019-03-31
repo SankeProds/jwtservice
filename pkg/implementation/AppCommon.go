@@ -1,6 +1,7 @@
 package implementation
 
 import (
+	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -14,14 +15,20 @@ type App interface {
 }
 
 func getNameAndPasswordFromRequest(r *http.Request) (string, string, error) {
-	query := r.URL.Query()
-	name := query.Get("name")
-	if name == "" {
+	decoder := json.NewDecoder(r.Body)
+	var data struct {
+		User     string
+		Password string
+	}
+	err := decoder.Decode(&data)
+	if err != nil {
+		return "", "", err
+	}
+	if data.User == "" {
 		return "", "", errors.New("missing param: name")
 	}
-	password := query.Get("password")
-	if password == "" {
+	if data.Password == "" {
 		return "", "", errors.New("missing param: password")
 	}
-	return name, password, nil
+	return data.User, data.Password, nil
 }

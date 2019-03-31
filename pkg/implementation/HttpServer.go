@@ -31,5 +31,7 @@ func (server *HttpServer) Start() {
 	http.Handle("/", server.reqRouter)
 	serverUrl := fmt.Sprintf("%s:%d", server.host, server.port)
 	log.Printf(fmt.Sprintf("Now listening on: %s", serverUrl))
+	// For security reasons, You should change this to: ListenAndServeTLS
+	// see https://golang.org/pkg/net/http/#ListenAndServeTLS form more info
 	log.Fatal(http.ListenAndServe(serverUrl, nil))
 }
