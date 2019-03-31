@@ -6,6 +6,9 @@ import (
 	"strconv"
 )
 
+/* Simple configuration object. Could implement differenc services
+   configuration necesities */
+
 var DEFAULT = map[string]interface{}{
 	"REDIS_ADDR":     "localhost:6379",
 	"REDIS_PASSWORD": "",

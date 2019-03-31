@@ -1,5 +1,7 @@
 package domain
 
+/* Simple user representation */
+
 type User struct {
 	Name     string
 	Password string

@@ -10,6 +10,8 @@ import (
 	"github.com/SankeProds/jwtservice/pkg/domain"
 )
 
+/* Finds and Stores Users on redis server */
+
 type RedisConf interface {
 	GetRedisAddr() string
 	GetRedisPassword() string
@@ -20,6 +22,7 @@ type UserRedisRepo struct {
 	client *redis.Client
 }
 
+// public create function
 func NewUserRedisRepo(conf RedisConf) *UserRedisRepo {
 	return &UserRedisRepo{
 		client: redis.NewClient(&redis.Options{

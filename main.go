@@ -1,20 +1,17 @@
 package main
 
 import (
-	"log"
-
 	"github.com/SankeProds/jwtservice/pkg/implementation"
 	"github.com/SankeProds/jwtservice/pkg/usecases"
+	"github.com/gorilla/mux"
 )
 
 func main() {
 
 	// for apps and modules to get configuration params
-	log.Printf("Configuration")
 	conf := new(implementation.EnvOrDefaultConf)
 
 	// data repos
-	log.Printf("Configuration")
 	userRedisRepo := implementation.NewUserRedisRepo(conf)
 
 	// use case handlers
@@ -30,16 +27,13 @@ func main() {
 
 	// Router & Routes
 	// Small layer the allows to register each app on the server handler
-	log.Printf("Creating Request Router\n")
-	requestRouter := new(implementation.RequestRouter)
-	requestRouter.Init()
+	muxRouter := mux.NewRouter()
 	for _, app := range apps {
-		requestRouter.AddApp(app)
+		app.RegisterHandlers(muxRouter)
 	}
 
 	// Http Server, get the routing info from requestRouter
-	log.Printf("Starting server...\n")
 	server := new(implementation.HttpServer)
-	server.Init(conf, requestRouter)
+	server.Init(conf, muxRouter)
 	server.Start()
 }
