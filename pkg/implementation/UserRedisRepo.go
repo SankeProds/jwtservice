@@ -10,16 +10,22 @@ import (
 	"github.com/SankeProds/jwtservice/pkg/domain"
 )
 
+type RedisConf interface {
+	GetRedisAddr() string
+	GetRedisPassword() string
+	GetRedisDB() int
+}
+
 type UserRedisRepo struct {
 	client *redis.Client
 }
 
-func NewUserRedisRepo() *UserRedisRepo {
+func NewUserRedisRepo(conf RedisConf) *UserRedisRepo {
 	return &UserRedisRepo{
 		client: redis.NewClient(&redis.Options{
-			Addr:     "localhost:1234", // use default Addr
-			Password: "",               // no password set
-			DB:       0,                // use default DB
+			Addr:     conf.GetRedisAddr(),
+			Password: conf.GetRedisPassword(),
+			DB:       conf.GetRedisDB(),
 		}),
 	}
 }

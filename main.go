@@ -10,11 +10,10 @@ import (
 func main() {
 
 	log.Printf("Loading Configuration\n")
-	conf := new(implementation.HardCodedConfig)
-	conf.Load()
+	conf := new(implementation.EnvOrDefaultConf)
 
 	// repos
-	userRedisRepo := implementation.NewUserRedisRepo()
+	userRedisRepo := implementation.NewUserRedisRepo(conf)
 
 	// use case handler
 	UserCases := usecases.NewUserUsecase(userRedisRepo)
