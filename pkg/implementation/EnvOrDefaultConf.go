@@ -10,14 +10,19 @@ import (
    configuration necesities */
 
 var DEFAULT = map[string]interface{}{
-	"REDIS_ADDR":     "localhost:6379",
-	"REDIS_PASSWORD": "",
-	"REDIS_DB":       0,
-	"SERVICE_HOST":   "localhost",
-	"SERVICE_PORT":   1234,
+	"REDIS_ADDR":      "localhost:6379",
+	"REDIS_PASSWORD":  "",
+	"REDIS_DB":        0,
+	"SERVICE_HOST":    "localhost",
+	"SERVICE_PORT":    1234,
+	"JWT_SIGNING_KEY": "HolaEnfermera",
 }
 
 type EnvOrDefaultConf struct{}
+
+func (c *EnvOrDefaultConf) GetSigningKey() string {
+	return lookStringInEnv("JWT_SIGNING_KEY")
+}
 
 func (c *EnvOrDefaultConf) GetPort() int {
 	return lookIntInEnv("SERVICE_PORT")

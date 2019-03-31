@@ -13,10 +13,12 @@ func main() {
 
 	// data repos
 	userRedisRepo := implementation.NewUserRedisRepo(conf)
+	signingKeyGetter := implementation.NewSigningKeyGetter(conf)
+	jWTGenerator := implementation.NewJWTGenerator(signingKeyGetter)
 
 	// use case handlers
 	userCasesHandler := usecases.NewUserUsecase(userRedisRepo)
-	sessionCasesHandler := usecases.NewSessionUsecase(userRedisRepo)
+	sessionCasesHandler := usecases.NewSessionUsecase(userRedisRepo, jWTGenerator)
 
 	// create each app handler
 	// App handler knows how to call the use case from  the http call
