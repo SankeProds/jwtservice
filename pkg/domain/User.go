@@ -3,13 +3,13 @@ package domain
 /* Simple user representation */
 
 type User struct {
-	Name     string
+	Id       string
 	Password string
 }
 
-func NewUser(name, password string) *User {
+func NewUser(id, password string) *User {
 	return &User{
-		Name:     name,
+		Id:       id,
 		Password: password,
 	}
 }

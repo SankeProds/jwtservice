@@ -1,1 +1,1 @@
-go build; ./run.sh
+go build && ./run.sh

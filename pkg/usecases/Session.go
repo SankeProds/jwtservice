@@ -36,7 +36,7 @@ func (u *sessionUsecase) Login(name, password string) (string, error) {
 	if err := user == nil || !user.CheckPassword(password); err {
 		return "", errors.New("Bad user/pass")
 	}
-	token, err := u.jwtGen.GetToken(user.Name)
+	token, err := u.jwtGen.GetToken(user.Id)
 	if err != nil {
 		return "", errors.New(fmt.Sprintf("Err getting token %+v", err))
 	}

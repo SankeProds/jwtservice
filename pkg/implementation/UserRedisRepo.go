@@ -55,7 +55,7 @@ func (ur *UserRedisRepo) Store(u *domain.User) bool {
 		log.Printf("Error storing user: %+v", err)
 		return false
 	}
-	err = ur.client.Set(u.Name, b, 0).Err()
+	err = ur.client.Set(u.Id, b, 0).Err()
 	if err != nil {
 		log.Printf("Error storing user: %+v", err)
 	}
