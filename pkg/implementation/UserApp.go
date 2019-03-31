@@ -2,6 +2,7 @@ package implementation
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -24,6 +25,7 @@ func NewUserApp(uc usecases.UserUsecase) *userApp {
 
 // Uses the input mux.Router to register where and how this apps expects its calls
 func (app *userApp) RegisterHandlers(r *mux.Router) {
+	log.Printf("register user handler: [POST] /user")
 	r.HandleFunc("/user", app.registerUserHandler).Methods("POST")
 }
 

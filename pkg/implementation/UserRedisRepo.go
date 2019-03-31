@@ -24,6 +24,7 @@ type UserRedisRepo struct {
 
 // public create function
 func NewUserRedisRepo(conf RedisConf) *UserRedisRepo {
+	log.Printf("Creating redis Repo")
 	return &UserRedisRepo{
 		client: redis.NewClient(&redis.Options{
 			Addr:     conf.GetRedisAddr(),

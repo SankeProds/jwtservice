@@ -2,6 +2,7 @@ package implementation
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -24,6 +25,7 @@ func NewSessionApp(sessionCases usecases.SessionUsecase) *sessionApp {
 
 // Uses the input mux.Router to register where and how this apps expects its calls
 func (app *sessionApp) RegisterHandlers(r *mux.Router) {
+	log.Printf("login handler: [POST] /session")
 	r.HandleFunc("/session", app.loginHandler).Methods("POST")
 }
 
