@@ -1,7 +1,6 @@
 package usecases
 
 import (
-	"errors"
 	"fmt"
 	"log"
 
@@ -30,11 +29,11 @@ func (u *userUsecase) RegisterUser(name, password string) error {
 	log.Printf("Registering: %s %s", name, password)
 	user := u.repo.FindByName(name)
 	if user != nil {
-		return errors.New(fmt.Sprintf("User %s already exists!", name))
+		return fmt.Errorf("user %s already exists", name)
 	}
 	user = domain.NewUser(name, password)
 	if u.repo.Store(user) {
 		return nil
 	}
-	return errors.New(fmt.Sprintf("Unexpected error registering %s", name))
+	return fmt.Errorf("unexpected error registering %s", name)
 }

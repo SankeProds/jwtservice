@@ -34,11 +34,11 @@ func (u *sessionUsecase) Login(name, password string) (string, error) {
 	log.Printf("Loging in user: %s", name)
 	user := u.repo.FindByName(name)
 	if err := user == nil || !user.CheckPassword(password); err {
-		return "", errors.New("Bad user/pass")
+		return "", errors.New("bad user/pass")
 	}
 	token, err := u.jwtGen.GetToken(user.Id)
 	if err != nil {
-		return "", errors.New(fmt.Sprintf("Err getting token %+v", err))
+		return "", fmt.Errorf("err getting token %+v", err)
 	}
 	return token, nil
 }

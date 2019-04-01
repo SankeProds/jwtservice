@@ -23,8 +23,13 @@ func NewSessionApp(sessionCases usecases.SessionUsecase) *sessionApp {
 	}
 }
 
+func (app *sessionApp) GetEndpoints() []*endpoint {
+	e := NewEndpoint("/session", app.loginHandler, []string{"POST"})
+	return []*endpoint{e}
+}
+
 // Uses the input mux.Router to register where and how this apps expects its calls
-func (app *sessionApp) RegisterHandlers(r *mux.Router) {
+func (app *sessionApp) UseRouter(r *mux.Router) {
 	log.Printf("login handler: [POST] /session")
 	r.HandleFunc("/session", app.loginHandler).Methods("POST")
 }
@@ -43,6 +48,6 @@ func (app *sessionApp) loginHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "%+v", err)
 	} else {
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, token)
+		fmt.Fprintln(w, token)
 	}
 }

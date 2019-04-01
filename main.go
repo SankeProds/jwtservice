@@ -2,40 +2,42 @@ package main
 
 import (
 	"github.com/SankeProds/jwtservice/pkg/implementation"
+	"github.com/SankeProds/jwtservice/pkg/interfaces"
 	"github.com/SankeProds/jwtservice/pkg/usecases"
-	"github.com/gorilla/mux"
 )
 
 func main() {
 
 	// for apps and modules to get configuration params
-	conf := new(implementation.EnvOrDefaultConf)
+	conf := new(interfaces.EnvOrDefaultConf)
+
+	redisStringStorage := implementation.NewRedisStringStorage(conf)
 
 	// data repos
-	userRedisRepo := implementation.NewUserRedisRepo(conf)
-	signingKeyGetter := implementation.NewSigningKeyGetter(conf)
-	jWTGenerator := implementation.NewJWTGenerator(signingKeyGetter)
+	userStorage := interfaces.NewUserStorage(redisStringStorage)
+
+	signingKeyGetter := interfaces.NewSigningKeyGetter(conf)
+	jWTGenerator := interfaces.NewJWTGenerator(signingKeyGetter)
 
 	// use case handlers
-	userCasesHandler := usecases.NewUserUsecase(userRedisRepo)
-	sessionCasesHandler := usecases.NewSessionUsecase(userRedisRepo, jWTGenerator)
+	userCasesHandler := usecases.NewUserUsecase(userStorage)
+	sessionCasesHandler := usecases.NewSessionUsecase(userStorage, jWTGenerator)
+
+	httpRouter := implementation.NewHttpRouter()
 
 	// create each app handler
 	// App handler knows how to call the use case from  the http call
-	apps := [...]implementation.App{
+	apps := [...]implementation.HttpApp{
 		implementation.NewUserApp(userCasesHandler),
 		implementation.NewSessionApp(sessionCasesHandler),
 	}
 
-	// Router & Routes
-	// Small layer the allows to register each app on the server handler
-	muxRouter := mux.NewRouter()
 	for _, app := range apps {
-		app.RegisterHandlers(muxRouter)
+		httpRouter.RegisterApp(app)
 	}
 
 	// Http Server, get the routing info from requestRouter
 	server := new(implementation.HttpServer)
-	server.Init(conf, muxRouter)
+	server.Init(conf, httpRouter)
 	server.Start()
 }

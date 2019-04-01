@@ -23,8 +23,13 @@ func NewUserApp(uc usecases.UserUsecase) *userApp {
 	}
 }
 
+func (app *userApp) GetEndpoints() []*endpoint {
+	e := NewEndpoint("/user", app.registerUserHandler, []string{"POST"})
+	return []*endpoint{e}
+}
+
 // Uses the input mux.Router to register where and how this apps expects its calls
-func (app *userApp) RegisterHandlers(r *mux.Router) {
+func (app *userApp) UseRouter(r *mux.Router) {
 	log.Printf("register user handler: [POST] /user")
 	r.HandleFunc("/user", app.registerUserHandler).Methods("POST")
 }
