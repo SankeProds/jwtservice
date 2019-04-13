@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-type JwtGenerator interface {
+type TokenGenerator interface {
 	GetToken(string) (string, error)
 }
 
@@ -17,26 +17,26 @@ type SessionUsecase interface {
 
 // Type remains private
 type sessionUsecase struct {
-	repo   UserRepo
-	jwtGen JwtGenerator
+	repo           UserRepo
+	tokenGenerator TokenGenerator
 }
 
 // Create function
-func NewSessionUsecase(repo UserRepo, jwtImplementation JwtGenerator) *sessionUsecase {
+func NewSessionUsecase(repo UserRepo, tokenImpl TokenGenerator) *sessionUsecase {
 	return &sessionUsecase{
-		repo:   repo,
-		jwtGen: jwtImplementation,
+		repo:           repo,
+		tokenGenerator: tokenImpl,
 	}
 }
 
 // interface implementation
-func (u *sessionUsecase) Login(name, password string) (string, error) {
+func (self *sessionUsecase) Login(name, password string) (string, error) {
 	log.Printf("Loging in user: %s", name)
-	user := u.repo.FindByName(name)
+	user := self.repo.FindByName(name)
 	if err := user == nil || !user.CheckPassword(password); err {
 		return "", errors.New("bad user/pass")
 	}
-	token, err := u.jwtGen.GetToken(user.Id)
+	token, err := self.tokenGenerator.GetToken(user.Id)
 	if err != nil {
 		return "", fmt.Errorf("err getting token %+v", err)
 	}

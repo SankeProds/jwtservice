@@ -8,22 +8,18 @@ import (
 
 func main() {
 
-	// for apps and modules to get configuration params
-	conf := new(interfaces.EnvOrDefaultConf)
+	// data repos and interfaces
+	conf := new(implementation.EnvOrDefaultConf)
 
 	redisStringStorage := implementation.NewRedisStringStorage(conf)
+	signingMethod := implementation.NewJWTGenerator(conf)
 
-	// data repos
 	userStorage := interfaces.NewUserStorage(redisStringStorage)
-
-	signingKeyGetter := interfaces.NewSigningKeyGetter(conf)
-	jWTGenerator := interfaces.NewJWTGenerator(signingKeyGetter)
+	tokenGenerator := interfaces.NewTokenGenerator(signingMethod)
 
 	// use case handlers
 	userCasesHandler := usecases.NewUserUsecase(userStorage)
-	sessionCasesHandler := usecases.NewSessionUsecase(userStorage, jWTGenerator)
-
-	httpRouter := implementation.NewHttpRouter()
+	sessionCasesHandler := usecases.NewSessionUsecase(userStorage, tokenGenerator)
 
 	// create each app handler
 	// App handler knows how to call the use case from  the http call
@@ -32,6 +28,7 @@ func main() {
 		implementation.NewSessionApp(sessionCasesHandler),
 	}
 
+	httpRouter := implementation.NewHttpRouter()
 	for _, app := range apps {
 		httpRouter.RegisterApp(app)
 	}
