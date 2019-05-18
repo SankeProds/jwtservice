@@ -1,7 +1,4 @@
 # OVERRIDE/SET this enviroment variables with your own values
-#REDIS_PASSWORD=pass
-#REDIS_DB=0
-#REDIS_ADDR=redis:6379
 #SERVICE_HOST=localhost
 #SERVICE_PORT=1234
 #JWT_SIGNING_KEY=millavelalleva
