@@ -68,5 +68,5 @@ body:
 ```
 returns
 ```
-<JWT>
+A VERIFIABLE JSON WEB TOKEN
 ```
