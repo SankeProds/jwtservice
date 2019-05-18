@@ -21,6 +21,10 @@ var DEFAULT = map[string]interface{}{
 
 type EnvOrDefaultConf struct{}
 
+func NewEnvOrDefaultConf() *EnvOrDefaultConf {
+	return &EnvOrDefaultConf{}
+}
+
 func (c *EnvOrDefaultConf) GetConnStr() string {
 	return lookStringInEnv("POSTGRES_CONNSTR")
 }

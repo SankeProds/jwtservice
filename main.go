@@ -9,7 +9,7 @@ import (
 func main() {
 
 	// data repos and interfaces
-	conf := new(implementation.EnvOrDefaultConf)
+	conf := implementation.NewEnvOrDefaultConf()
 
 	authUserPostgresStorage := implementation.NewAuthUserPostgresStorage(conf)
 	signingMethod := implementation.NewJWTGenerator(conf)
