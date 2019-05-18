@@ -17,9 +17,11 @@ func main() {
 	userStorage := interfaces.NewUserStorage(authUserPostgresStorage)
 	tokenGenerator := interfaces.NewTokenGenerator(signingMethod)
 
+	authenticator := implementation.NewAuthenticator()
+
 	// use case handlers
-	registerUserUCHandler := usecases.NewRegisterUserUC(userStorage)
-	loginUCHandler := usecases.NewLoginUC(userStorage, tokenGenerator)
+	registerUserUCHandler := usecases.NewRegisterUserUC(userStorage, authenticator)
+	loginUCHandler := usecases.NewLoginUC(userStorage, tokenGenerator, authenticator)
 
 	// create each app handler
 	// App handler knows how to call the use case from  the http call

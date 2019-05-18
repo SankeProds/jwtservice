@@ -3,9 +3,8 @@ package usecases
 import "github.com/SankeProds/jwtservice/pkg/domain"
 
 type AuthUser struct {
-	user       *domain.User
-	authMethod string
-	authData   interface{}
+	user     *domain.User
+	authData interface{}
 }
 
 // repo interface to get users
@@ -14,11 +13,10 @@ type UserRepo interface {
 	Store(*AuthUser) bool
 }
 
-func NewAuthUser(id string, data interface{}, authMethod string, authData interface{}) *AuthUser {
+func NewAuthUser(id string, data, authData interface{}) *AuthUser {
 	return &AuthUser{
-		user:       domain.NewUser(id, data),
-		authMethod: authMethod,
-		authData:   authData,
+		user:     domain.NewUser(id, data),
+		authData: authData,
 	}
 }
 
@@ -30,10 +28,12 @@ func (user *AuthUser) GetData() interface{} {
 	return user.user.Data
 }
 
-func (user *AuthUser) GetAuthMethod() string {
-	return user.authMethod
-}
-
 func (user *AuthUser) GetAuthData() interface{} {
 	return user.authData
+}
+
+// Validator interface
+type Authenticator interface {
+	Validate(authData interface{}) error
+	Authenticate(authData, loginData interface{}) error
 }

@@ -2,7 +2,6 @@ package implementation
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/SankeProds/jwtservice/pkg/usecases"
@@ -34,14 +33,13 @@ func (app *registerUserApp) registerUserHandler(w http.ResponseWriter, r *http.R
 		fmt.Fprintf(w, "%+v", err)
 		return
 	}
-	log.Printf("%+v", data.AuthMethod)
-	if data.Id == "" || data.Data == nil || data.AuthData == nil || data.AuthMethod == "" {
+	if data.Id == "" || data.Data == nil || data.AuthData == nil {
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "%+v", "Missing required param")
 		return
 	}
 	// Make the call
-	if err := app.registerUserUC.RegisterUser(data.Id, data.Data, data.AuthData, data.AuthMethod); err != nil {
+	if err := app.registerUserUC.RegisterUser(data.Id, data.Data, data.AuthData); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "%+v", err)
 	} else {

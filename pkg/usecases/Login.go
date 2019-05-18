@@ -19,13 +19,15 @@ type LoginUC interface {
 type loginUC struct {
 	repo           UserRepo
 	tokenGenerator TokenGenerator
+	authenticator  Authenticator
 }
 
 // Create function
-func NewLoginUC(repo UserRepo, tokenImpl TokenGenerator) *loginUC {
+func NewLoginUC(repo UserRepo, tokenImpl TokenGenerator, authenticator Authenticator) *loginUC {
 	return &loginUC{
 		repo:           repo,
 		tokenGenerator: tokenImpl,
+		authenticator:  authenticator,
 	}
 }
 
@@ -34,6 +36,9 @@ func (self *loginUC) Login(id string, loginMethod string, loginData interface{})
 	log.Printf("Loging in user: [%s]", id)
 	user, err := self.repo.FindById(id)
 	if err := err != nil || user == nil; err {
+		return "", errors.New("bad user/pass")
+	}
+	if err = self.authenticator.Authenticate(user.GetAuthData(), loginData); err != nil {
 		return "", errors.New("bad user/pass")
 	}
 	token, err := self.tokenGenerator.GetToken(user.GetId())

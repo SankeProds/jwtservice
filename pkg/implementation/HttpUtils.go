@@ -8,7 +8,6 @@ import (
 type RequestData struct {
 	Id          string
 	Data        interface{}
-	AuthMethod  string
 	LoginMethod string
 	AuthData    interface{}
 	LoginData   interface{}

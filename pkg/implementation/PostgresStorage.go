@@ -30,10 +30,9 @@ func NewAuthUserPostgresStorage(conf PostgresConf) *authUserPostgresStorage {
 }
 
 type userRow struct {
-	id         string
-	data       string
-	authMethod string
-	authData   string
+	id       string
+	data     string
+	authData string
 }
 
 func userRowToAuthUser(ur userRow) (*usecases.AuthUser, error) {
@@ -51,13 +50,13 @@ func userRowToAuthUser(ur userRow) (*usecases.AuthUser, error) {
 		log.Printf("lol %+v", ur)
 		return nil, err
 	}
-	return usecases.NewAuthUser(ur.id, data, ur.authMethod, authData), nil
+	return usecases.NewAuthUser(ur.id, data, authData), nil
 }
 
 func getUserFromRows(rows *sql.Rows) (*usecases.AuthUser, error) {
 	for rows.Next() {
 		var ur userRow
-		err := rows.Scan(&ur.id, &ur.data, &ur.authMethod, &ur.authData)
+		err := rows.Scan(&ur.id, &ur.data, &ur.authData)
 		if err != nil {
 			log.Printf("Error scaning rows")
 			return nil, err
@@ -98,10 +97,9 @@ func (aups *authUserPostgresStorage) Save(user *usecases.AuthUser) error {
 		return err
 	}
 	_, err = db.Query(fmt.Sprintf(
-		`INSERT INTO users(id, data, authMethod, authData) VALUES('%s', '%s', '%s', '%s') RETURNING id`,
+		`INSERT INTO users(id, data, authData) VALUES('%s', '%s', '%s') RETURNING id`,
 		user.GetId(),
 		string(b_dataStr),
-		user.GetAuthMethod(),
 		string(b_authDataStr)))
 	return err
 }
