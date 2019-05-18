@@ -33,9 +33,9 @@ registers an user to use the other services.
 - authData: the data to use to verify the user identity  
   - AuthMethod is the only mandatory field of authdata. Only supported method rigth now is "password"
 
+```
 application/json
 body:
-```
 {
     "id": "A_USER_ID", 
     "data": {
@@ -56,13 +56,15 @@ logs in a use that is going to use the other services
 id: a user id
 loginData: the data to log the user in. This is compared/validated with the data at registration. fields depends on authMethod set at /register
 
+```
 application/json
 body:
 {
-	"id": "A_USER_ID",
-	"loginData": {
+    "id": "A_USER_ID",
+    "loginData": {
         "password":"1"
     }
 }
+```
 returns
 "<JWT>"
