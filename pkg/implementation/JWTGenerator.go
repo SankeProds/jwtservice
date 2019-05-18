@@ -1,7 +1,7 @@
 package implementation
 
 import (
-	"log"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -22,12 +22,10 @@ func NewJWTGenerator(conf JWTConfiguration) *JWTGenerator {
 
 func (self *JWTGenerator) GetToken(issuer string) (string, error) {
 	claims := &jwt.StandardClaims{
-		ExpiresAt: 15000,
+		ExpiresAt: time.Now().UTC().Unix() + 1500,
 		Issuer:    issuer,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	log.Printf("token = %+v", token)
-	log.Printf("key = %+v", self.key)
 	ss, err := token.SignedString([]byte(self.key))
 	return ss, err
 }

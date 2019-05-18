@@ -35,10 +35,12 @@ func NewLoginUC(repo UserRepo, tokenImpl TokenGenerator, authenticator Authentic
 func (self *loginUC) Login(id string, loginMethod string, loginData interface{}) (string, error) {
 	log.Printf("Loging in user: [%s]", id)
 	user, err := self.repo.FindById(id)
-	if err := err != nil || user == nil; err {
+	if fail := err != nil || user == nil; fail {
+		log.Printf("bad user/pass: %+v", err)
 		return "", errors.New("bad user/pass")
 	}
 	if err = self.authenticator.Authenticate(user.GetAuthData(), loginData); err != nil {
+		log.Printf("bad user/pass: %+v", err)
 		return "", errors.New("bad user/pass")
 	}
 	token, err := self.tokenGenerator.GetToken(user.GetId())

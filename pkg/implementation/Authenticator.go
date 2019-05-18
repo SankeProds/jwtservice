@@ -39,8 +39,16 @@ func (auth *authenticator) Validate(authData interface{}) error {
 	return fmt.Errorf("Unsuported auth method: [%+v]", data.AuthMethod)
 }
 
-func (auth *authenticator) Authenticate(authData, loginData interface{}) error {
-	return nil
+func (auth *authenticator) Authenticate(authDataRaw, loginDataRaw interface{}) error {
+	authData, err := getData(authDataRaw)
+	loginData, err := getData(loginDataRaw)
+	if err != nil {
+		return fmt.Errorf("Error building login Data: %+v", err)
+	}
+	if authData.AuthMethod == "password" && authData.Password == loginData.Password {
+		return nil
+	}
+	return fmt.Errorf("AuthFailed")
 }
 
 func validatePasswordData(passwordData *AuthData) error {
