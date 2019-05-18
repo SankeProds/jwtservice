@@ -53,8 +53,8 @@ body:
 
 logs in a use that is going to use the other services
 
-id: a user id
-loginData: the data to log the user in. This is compared/validated with the data at registration. fields depends on authMethod set at /register
+- id: a user id
+- loginData: the data to log the user in. This is compared/validated with the data at registration. fields depends on authMethod set at `/register`
 
 ```
 application/json
@@ -67,4 +67,6 @@ body:
 }
 ```
 returns
-"<JWT>"
+```
+<JWT>
+```
