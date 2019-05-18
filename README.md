@@ -1,13 +1,13 @@
 # JWTservice
-A JWT service for a secret app I'm creating. There is no business logic here so I though "why not share?"
+A JWT service for a secret app I'm creating. There is no business logic here so I thought "why not share?"
 
-Users will be able to register and login with this service. User of the other services of the app will require a JWT provided by this service `/login` endpoint.
+Users will be able to register and log in with this service. The user of the other services of the app will require a JWT provided by this service `/login` endpoint.
 
-this services state is not final. I'm now focused on other service for the app but this repo still has more versions/features in its future. 
+this services state is not final. I'm now focused on other services for the app but this repo still has more versions/features in its future. 
 
 # Prerequisites:
 
-- A running postgres DB.
+- A running Postgres DB.
 - Set up your database
 - Run `db/mig_*.sql` before using the service.
 
@@ -25,7 +25,7 @@ The following script runs the service (read the contents to see configuration op
 ./run.sh
 ```
 
-The followin script does the same thing but runs a `go build` before 
+The following script does the same thing but runs a `go build` before 
 ```
 ./buildandrun.sh
 ```
@@ -39,7 +39,7 @@ registers a user to use the other services.
 - id: a user id  
 - data: a json with users data  
 - authData: the data to use to verify the user identity  
-  - AuthMethod is the only mandatory field of authdata. Only supported method rigth now is "password"
+  - AuthMethod is the only mandatory field of authdata. Only supported method right now is "password"
 
 ```
 application/json
@@ -62,7 +62,7 @@ body:
 logs in a user that is going to use the other services
 
 - id: a user id
-- loginData: the data to log the user in. This is compared/validated with the data at registration. fields depends on authMethod set at `/register`
+- loginData: the data to log the user in. This is compared/validated with the data at registration. fields depend on authMethod set at `/register`
 
 ```
 application/json
