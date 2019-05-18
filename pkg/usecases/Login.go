@@ -11,26 +11,26 @@ type TokenGenerator interface {
 }
 
 // Import interface
-type AuthUserUC interface {
+type LoginUC interface {
 	Login(id, loginMethod string, loginData interface{}) (string, error)
 }
 
 // Type remains private
-type authUserUC struct {
+type loginUC struct {
 	repo           UserRepo
 	tokenGenerator TokenGenerator
 }
 
 // Create function
-func NewAuthUserUC(repo UserRepo, tokenImpl TokenGenerator) *authUserUC {
-	return &authUserUC{
+func NewLoginUC(repo UserRepo, tokenImpl TokenGenerator) *loginUC {
+	return &loginUC{
 		repo:           repo,
 		tokenGenerator: tokenImpl,
 	}
 }
 
 // interface implementation
-func (self *authUserUC) Login(id string, loginMethod string, loginData interface{}) (string, error) {
+func (self *loginUC) Login(id string, loginMethod string, loginData interface{}) (string, error) {
 	log.Printf("Loging in user: [%s]", id)
 	user, err := self.repo.FindById(id)
 	if err := err != nil || user == nil; err {

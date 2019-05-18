@@ -19,13 +19,13 @@ func main() {
 
 	// use case handlers
 	registerUserUCHandler := usecases.NewRegisterUserUC(userStorage)
-	authUserUCHandler := usecases.NewAuthUserUC(userStorage, tokenGenerator)
+	loginUCHandler := usecases.NewLoginUC(userStorage, tokenGenerator)
 
 	// create each app handler
 	// App handler knows how to call the use case from  the http call
 	apps := [...]implementation.HttpApp{
 		implementation.NewRegisterUserApp(registerUserUCHandler),
-		implementation.NewAuthUserApp(authUserUCHandler),
+		implementation.NewLoginApp(loginUCHandler),
 	}
 
 	httpRouter := implementation.NewHttpRouter()

@@ -9,23 +9,23 @@ import (
 
 /* Validates and extract data from http request and calls the Session use cases */
 
-type AuthUserApp struct {
-	authUsers usecases.AuthUserUC
+type LoginApp struct {
+	loginUC usecases.LoginUC
 }
 
 // Public constructor
-func NewAuthUserApp(authUsers usecases.AuthUserUC) *AuthUserApp {
-	return &AuthUserApp{
-		authUsers: authUsers,
+func NewLoginApp(loginUC usecases.LoginUC) *LoginApp {
+	return &LoginApp{
+		loginUC: loginUC,
 	}
 }
 
-func (app *AuthUserApp) GetEndpoints() []*endpoint {
-	e := NewEndpoint("/auth", app.loginHandler, []string{"POST"})
+func (app *LoginApp) GetEndpoints() []*endpoint {
+	e := NewEndpoint("/login", app.loginHandler, []string{"POST"})
 	return []*endpoint{e}
 }
 
-func (app *AuthUserApp) loginHandler(w http.ResponseWriter, r *http.Request) {
+func (app *LoginApp) loginHandler(w http.ResponseWriter, r *http.Request) {
 	// Get and Check for params
 	data, err := getDataFromRequest(r)
 	if err != nil {
@@ -34,7 +34,7 @@ func (app *AuthUserApp) loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Make the call
-	if token, err := app.authUsers.Login(data.Id, data.LoginMethod, data.LoginData); err != nil {
+	if token, err := app.loginUC.Login(data.Id, data.LoginMethod, data.LoginData); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "%+v", err)
 	} else {

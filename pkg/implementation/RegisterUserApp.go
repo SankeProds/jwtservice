@@ -22,7 +22,7 @@ func NewRegisterUserApp(registerUserUC usecases.RegisterUserUC) *registerUserApp
 }
 
 func (app *registerUserApp) GetEndpoints() []*endpoint {
-	e := NewEndpoint("/user", app.registerUserHandler, []string{"POST"})
+	e := NewEndpoint("/register", app.registerUserHandler, []string{"POST"})
 	return []*endpoint{e}
 }
 
