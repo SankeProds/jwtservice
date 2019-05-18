@@ -13,10 +13,14 @@ go build
 # Running it:
 
 The following script runs the service (read the contents to see configuration options):
+```
 ./run.sh
+```
 
 The followin script does the same thing but runs a `go build` before 
+```
 ./buildandrun.sh
+```
 
 # two endpoints 
 
@@ -24,24 +28,26 @@ The followin script does the same thing but runs a `go build` before
 
 registers an user to use the other services. 
 
-id: a user id
-data: a json with users data
-authData: the data to use to verify the user identity
-- AuthMethod is the only mandatory field of authdata. Only supported method rigth now is "password"
+- id: a user id  
+- data: a json with users data  
+- authData: the data to use to verify the user identity  
+  - AuthMethod is the only mandatory field of authdata. Only supported method rigth now is "password"
 
 application/json
 body:
+```
 {
-	"id": "A_USER_ID", 
-	"data": {
+    "id": "A_USER_ID", 
+    "data": {
         "age": 33,
         "And": "Any other data you waned to store"
     },
-	"authData": {
-		"AuthMethod": "password",
-		"Password": "1"
-	}
+    "authData": {
+        "AuthMethod": "password",
+	"Password": "1"
+    }
 }
+```
 
 ## [POST] /login
 
