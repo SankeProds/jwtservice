@@ -3,12 +3,16 @@ a JWT service
 
 # Prerequisites:
 
-A running postgres DB. Run `db/mig_*.sql` before using the service.
+- A running postgres DB.
+- Set up your database
+- Run `db/mig_*.sql` before using the service.
 
 # Build the service:
 
+```
 go get
 go build
+```
 
 # Running it:
 
