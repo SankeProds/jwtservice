@@ -11,21 +11,21 @@ func main() {
 	// data repos and interfaces
 	conf := new(implementation.EnvOrDefaultConf)
 
-	redisStringStorage := implementation.NewRedisStringStorage(conf)
+	authUserPostgresStorage := implementation.NewAuthUserPostgresStorage(conf)
 	signingMethod := implementation.NewJWTGenerator(conf)
 
-	userStorage := interfaces.NewUserStorage(redisStringStorage)
+	userStorage := interfaces.NewUserStorage(authUserPostgresStorage)
 	tokenGenerator := interfaces.NewTokenGenerator(signingMethod)
 
 	// use case handlers
-	userCasesHandler := usecases.NewUserUsecase(userStorage)
-	sessionCasesHandler := usecases.NewSessionUsecase(userStorage, tokenGenerator)
+	registerUserUCHandler := usecases.NewRegisterUserUC(userStorage)
+	authUserUCHandler := usecases.NewAuthUserUC(userStorage, tokenGenerator)
 
 	// create each app handler
 	// App handler knows how to call the use case from  the http call
 	apps := [...]implementation.HttpApp{
-		implementation.NewUserApp(userCasesHandler),
-		implementation.NewSessionApp(sessionCasesHandler),
+		implementation.NewRegisterUserApp(registerUserUCHandler),
+		implementation.NewAuthUserApp(authUserUCHandler),
 	}
 
 	httpRouter := implementation.NewHttpRouter()

@@ -1,53 +1,40 @@
 package interfaces
 
 import (
-	"encoding/json"
 	"log"
-	"strings"
 
-	"github.com/SankeProds/jwtservice/pkg/domain"
+	"github.com/SankeProds/jwtservice/pkg/usecases"
 )
 
 /* Finds and Stores Users */
 
-type StringStorage interface {
-	Get(key string) (string, error)
-	Save(key, val string) error
+type AuthUserStorage interface {
+	Get(id string) (*usecases.AuthUser, error)
+	Save(*usecases.AuthUser) error
 }
 
 type UserStorage struct {
-	storage StringStorage
+	storage AuthUserStorage
 }
 
 // public create function
-func NewUserStorage(storage StringStorage) *UserStorage {
+func NewUserStorage(storage AuthUserStorage) *UserStorage {
 	return &UserStorage{
 		storage: storage,
 	}
 }
 
-func (ur *UserStorage) FindByName(name string) *domain.User {
-	strRep, err := ur.storage.Get(name)
+func (ur *UserStorage) FindById(id string) (*usecases.AuthUser, error) {
+	authUser, err := ur.storage.Get(id)
 	if err != nil {
 		log.Printf("Error getting user: %+v", err)
-		return nil
+		return nil, err
 	}
-	dec := json.NewDecoder(strings.NewReader(strRep))
-	var user domain.User
-	if err = dec.Decode(&user); err != nil {
-		log.Printf("Error getting user: %+v", err)
-		return nil
-	}
-	return &user
+	return authUser, nil
 }
 
-func (ur *UserStorage) Store(u *domain.User) bool {
-	b, err := json.Marshal(u)
-	if err != nil {
-		log.Printf("Error storing user: %+v", err)
-		return false
-	}
-	err = ur.storage.Save(u.Id, string(b))
+func (ur *UserStorage) Store(authUser *usecases.AuthUser) bool {
+	err := ur.storage.Save(authUser)
 	if err != nil {
 		log.Printf("Error storing user: %+v", err)
 	}

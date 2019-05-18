@@ -2,25 +2,21 @@ package implementation
 
 import (
 	"encoding/json"
-	"errors"
 	"net/http"
 )
 
-func getNameAndPasswordFromRequest(r *http.Request) (string, string, error) {
+type RequestData struct {
+	Id          string
+	Data        interface{}
+	AuthMethod  string
+	LoginMethod string
+	AuthData    interface{}
+	LoginData   interface{}
+}
+
+func getDataFromRequest(r *http.Request) (RequestData, error) {
 	decoder := json.NewDecoder(r.Body)
-	var data struct {
-		User     string
-		Password string
-	}
+	var data RequestData
 	err := decoder.Decode(&data)
-	if err != nil {
-		return "", "", err
-	}
-	if data.User == "" {
-		return "", "", errors.New("missing param: name")
-	}
-	if data.Password == "" {
-		return "", "", errors.New("missing param: password")
-	}
-	return data.User, data.Password, nil
+	return data, err
 }

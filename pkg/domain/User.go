@@ -3,17 +3,13 @@ package domain
 /* Simple user representation */
 
 type User struct {
-	Id       string
-	Password string
+	Id   string
+	Data interface{}
 }
 
-func NewUser(id, password string) *User {
+func NewUser(id string, data interface{}) *User {
 	return &User{
-		Id:       id,
-		Password: password,
+		Id:   id,
+		Data: data,
 	}
-}
-
-func (u User) CheckPassword(pass string) bool {
-	return u.Password == pass
 }

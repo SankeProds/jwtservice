@@ -1,6 +1,10 @@
 package implementation
 
-import "github.com/dgrijalva/jwt-go"
+import (
+	"log"
+
+	"github.com/dgrijalva/jwt-go"
+)
 
 type JWTGenerator struct {
 	key string
@@ -22,6 +26,8 @@ func (self *JWTGenerator) GetToken(issuer string) (string, error) {
 		Issuer:    issuer,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	ss, err := token.SignedString(self.key)
+	log.Printf("token = %+v", token)
+	log.Printf("key = %+v", self.key)
+	ss, err := token.SignedString([]byte(self.key))
 	return ss, err
 }

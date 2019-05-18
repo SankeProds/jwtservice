@@ -1,6 +1,7 @@
 package implementation
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -37,6 +38,7 @@ func NewHttpRouter() *httpRouter {
 func (router *httpRouter) RegisterApp(app HttpApp) {
 	endpoints := app.GetEndpoints()
 	for _, endpoint := range endpoints {
+		log.Printf("ENDPOINT> %s %v", endpoint.path, endpoint.methods)
 		router.muxR.HandleFunc(endpoint.path, endpoint.handler).Methods(endpoint.methods...)
 	}
 }
