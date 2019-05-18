@@ -1,5 +1,9 @@
 # JWTservice
-a JWT service
+A JWT service for a secret app I'm creating. There is no business logic here so I though "why not share?"
+
+Users will be able to register and login with this service. User of the other services of the app will require a JWT provided by this service `/login` endpoint.
+
+this services state is not final. I'm now focused on other service for the app but this repo still has more versions/features in its future. 
 
 # Prerequisites:
 
@@ -74,3 +78,11 @@ returns
 ```
 A VERIFIABLE JSON WEB TOKEN
 ```
+
+# ROAD MAP
+
+- DOCKER IMAGE
+- JENKINS FILE
+- [GET] /user endpoint
+- tests
+- probably more
